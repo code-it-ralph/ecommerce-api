@@ -33,7 +33,7 @@ module.exports.myOrder = (data, userData) => {
 		}
 		else {
 
-			return result.orders;
+			return result;
 		}
 	})
 };
