@@ -42,6 +42,13 @@ module.exports.getAllActive = () => {
 	})
 };
 
+// Retrieve all Products
+module.exports.getAllProducts = () => {
+	return Product.find({}).then(result => {
+		return result;
+	})
+};
+
 
 // Retrieve Specific Product
 module.exports.getProduct = (reqParams) => {
@@ -90,6 +97,36 @@ module.exports.archiveProduct = (reqParams, userData) => {
 		}
 		else {
 			return Product.findByIdAndUpdate(reqParams.productId, { isActive: false }).then((result, error) => {
+				if (error) {
+					return false;
+				}
+				else {
+
+					return result.save().then((archivedPoduct, err) => {
+						if (err) {
+							return false;
+						}
+						else {
+							return true;
+
+						}
+					})
+				}
+			})
+		}
+	})
+};
+
+
+// Unarchiving a Product
+module.exports.unarchiveProduct = (reqParams, userData) => {
+
+	return User.findById(userData.userId).then(result => {
+		if (userData.isAdmin != true) {
+			return false;
+		}
+		else {
+			return Product.findByIdAndUpdate(reqParams.productId, { isActive: true }).then((result, error) => {
 				if (error) {
 					return false;
 				}

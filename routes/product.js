@@ -14,10 +14,14 @@ router.post("/", auth.verify, (req, res) => {
 });
 
 
-
 // Route for Retrieving All Active Products
 router.get("/", (req, res) => {
 	productController.getAllActive().then(result => res.send(result));
+});
+
+// Route for Retrieving All Products
+router.get("/all", (req, res) => {
+	productController.getAllProducts().then(result => res.send(result));
 });
 
 
@@ -46,6 +50,14 @@ router.put("/:productId/archive", auth.verify, (req, res) => {
 	.then(result => res.send(result));
 })
 
+// Route for Unarchiving a Product
+router.put("/:productId/unarchive", auth.verify, (req, res) => {
+
+	const userData = auth.decode(req.headers.authorization);
+
+	productController.unarchiveProduct(req.params, {userId: userData.id, isAdmin: userData.isAdmin})
+	.then(result => res.send(result));
+})
 
 
 
